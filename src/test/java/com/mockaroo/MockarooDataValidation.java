@@ -55,16 +55,6 @@ public class MockarooDataValidation {
 		driver.quit();
 	}
 
-	@BeforeMethod
-	public void beforeMethod() {
-
-	}
-
-	@AfterMethod
-	public void afterMethod() {
-
-	}
-
 	@Test(priority = 1)
 	public void step3() {
 		String expectedTitle = "Mockaroo - Random Data Generator and API Mocking Tool | JSON / CSV / SQL / Excel";
@@ -220,38 +210,13 @@ public class MockarooDataValidation {
 
 	@Test(priority = 10)
 	public void step17_18() throws InterruptedException {
-		// try with resources
+
 		Thread.sleep(5000);
 		String filePath = "C:\\Users\\arslan\\Downloads\\MOCK_DATA.csv";
-		// try (BufferedReader br = new BufferedReader(new FileReader(filePath));) {
-		// String line = "";
-		// while ((line = br.readLine()) != null)
-		// data = Arrays.asList(line.split(","));
-		// } catch (Exception e) {
-		// System.out.println("File could not be found");
-		// }
 
 		// STEP 21 & 22 are included here
-		try (FileInputStream fis = new FileInputStream(filePath);
-				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-				CSVReader reader = new CSVReader(isr)) {
-			String[] nextLine;
-
-			while ((nextLine = reader.readNext()) != null) {
-				boolean isCity = true;
-				for (String e : nextLine) {
-					if (isCity) {
-						cities.add(e);
-					} else {
-						countries.add(e);
-					}
-					isCity = !isCity;
-				}
-			}
-		} catch (IOException e) {
-			System.out.println("File Not Found");
-		}
-
+		uploadFile(filePath);
+		
 		// STEP 18
 		assertEquals("City", cities.get(0));
 		assertEquals("Country", countries.get(0));
@@ -298,17 +263,10 @@ public class MockarooDataValidation {
 		Set<String> citiesSet = new HashSet<>(cities);
 
 		// STEP 25
-		int uniqueCityCount = 0;
+		System.out.println("Unique city count by for loop: " + uniqueCounter(cities));
+		System.out.println("Unique city count by HashSet: " + (citiesSet.size() - 1));
 
-		for (int i = 0; i < cities.size(); i++) {
-			if (i == cities.lastIndexOf(cities.get(i)))
-				uniqueCityCount++;
-		}
-
-		System.out.println("Unique city count by for loop: " + uniqueCityCount);
-		System.out.println("Unique city count by HashSet: " + citiesSet.size());
-
-		assertEquals(uniqueCityCount, citiesSet.size());
+		assertEquals(uniqueCounter(cities), citiesSet.size() - 1);
 	}
 
 	@Test(priority = 12)
@@ -316,19 +274,48 @@ public class MockarooDataValidation {
 		// STEP 26
 		Set<String> countrySet = new HashSet<>(countries);
 
-		
 		// STEP 27
-		int uniqueCountryCount = 0;
+		System.out.println("Unique country count by for loop: " + uniqueCounter(countries));
+		System.out.println("Unique country count by HashSet: " + (countrySet.size() - 1));
 
-		for (int i = 0; i < countries.size(); i++) {
-			if (i == countries.lastIndexOf(countries.get(i)))
-				uniqueCountryCount++;
+		assertEquals(uniqueCounter(countries), countrySet.size() - 1);
+	}
+
+	
+	// this method will count the unique city or country names from given list
+	public int uniqueCounter(List<String> lst) {
+		int uniqueCounter = 0;
+
+		for (int i = 0; i < lst.size(); i++) {
+			if (i == lst.lastIndexOf(lst.get(i)))
+				uniqueCounter++;
 		}
+		// reduce by one to account for the city/country header row
+		return uniqueCounter - 1;
+	}
+	
+	
+	// this method will upload the downloaded file and add all content to cities and countries lists
+	public void uploadFile(String filePath) {
+		try (FileInputStream fis = new FileInputStream(filePath);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+				CSVReader reader = new CSVReader(isr)) {
+			String[] nextLine;
 
-		System.out.println("Unique country count by for loop: " + uniqueCountryCount);
-		System.out.println("Unique country count by HashSet: " + countrySet.size());
-
-		assertEquals(uniqueCountryCount, countrySet.size());
+			while ((nextLine = reader.readNext()) != null) {
+				boolean isCity = true;
+				for (String e : nextLine) {
+					if (isCity) {
+						cities.add(e);
+					} else {
+						countries.add(e);
+					}
+					isCity = !isCity;
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("File Not Found");
+		}
 	}
 
 }
