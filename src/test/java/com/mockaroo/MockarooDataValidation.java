@@ -51,7 +51,6 @@ public class MockarooDataValidation {
 
 	@AfterClass
 	public void tearDown() throws InterruptedException {
-		Thread.sleep(5000);
 		driver.quit();
 	}
 
@@ -104,7 +103,7 @@ public class MockarooDataValidation {
 		assertTrue(addAnotherButton.isEnabled());
 	}
 
-	@Test
+	@Test(priority = 5)
 	public void step8() {
 		String actual = driver.findElement(By.id("num_rows")).getAttribute("value");
 		String expected = "1000";
@@ -112,7 +111,7 @@ public class MockarooDataValidation {
 		assertEquals(actual, expected);
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 6)
 	public void step9() {
 		// choose and create new Select object
 		Select select = new Select(driver.findElement(By.id("schema_file_format")));
@@ -133,7 +132,7 @@ public class MockarooDataValidation {
 		// }
 	}
 
-	@Test(priority = 6)
+	@Test(priority = 7)
 	public void step10() {
 		// choose and create new Select object
 		Select select = new Select(driver.findElement(By.id("schema_line_ending")));
@@ -145,7 +144,7 @@ public class MockarooDataValidation {
 		assertEquals(actual, expected);
 	}
 
-	@Test(priority = 7)
+	@Test(priority = 8)
 	public void step11() {
 		WebElement headerChkbx = driver.findElement(By.id("schema_include_header"));
 		WebElement bomChkbx = driver.findElement(By.id("schema_bom"));
@@ -154,7 +153,7 @@ public class MockarooDataValidation {
 		assertFalse(bomChkbx.isSelected());
 	}
 
-	@Test(priority = 8)
+	@Test(priority = 9)
 	public void step12_13() {
 		// STEP 12
 		// click on Add Another Field button
@@ -176,7 +175,7 @@ public class MockarooDataValidation {
 		assertFalse(Boolean.valueOf(dialogBox.getAttribute("aria-hidden")));
 	}
 
-	@Test(priority = 9)
+	@Test(priority = 10)
 	public void step14_15_16() throws InterruptedException {
 		// STEP 14
 		driver.findElement(By.id("type_search_field")).sendKeys("city");
@@ -208,7 +207,7 @@ public class MockarooDataValidation {
 		driver.findElement(By.id("download")).click();
 	}
 
-	@Test(priority = 10)
+	@Test(priority = 11)
 	public void step17_18() throws InterruptedException {
 
 		Thread.sleep(5000);
@@ -225,7 +224,7 @@ public class MockarooDataValidation {
 		assertEquals(1000, cities.size() - 1);
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 12)
 	public void step22() {
 		// STEP 22
 		Collections.sort(cities);
@@ -247,9 +246,11 @@ public class MockarooDataValidation {
 				cityShort = city;
 			}
 		}
-
+		
+		System.out.println("============================================");
 		System.out.println("Shortest named city: " + "\t" + cityShort);
 		System.out.println("Longest named city: " + "\t" + cityLongest);
+		System.out.println("============================================");
 
 		// STEP 23
 		SortedSet<String> sortedCountry = new TreeSet<>(countries);
@@ -263,21 +264,23 @@ public class MockarooDataValidation {
 		Set<String> citiesSet = new HashSet<>(cities);
 
 		// STEP 25
+		System.out.println("============================================");
 		System.out.println("Unique city count by for loop: " + uniqueCounter(cities));
 		System.out.println("Unique city count by HashSet: " + (citiesSet.size() - 1));
-
+		System.out.println("============================================");
 		assertEquals(uniqueCounter(cities), citiesSet.size() - 1);
 	}
 
-	@Test(priority = 12)
+	@Test(priority = 13)
 	public void step26_27() {
 		// STEP 26
 		Set<String> countrySet = new HashSet<>(countries);
 
 		// STEP 27
+		System.out.println("============================================");
 		System.out.println("Unique country count by for loop: " + uniqueCounter(countries));
 		System.out.println("Unique country count by HashSet: " + (countrySet.size() - 1));
-
+		System.out.println("============================================");
 		assertEquals(uniqueCounter(countries), countrySet.size() - 1);
 	}
 
