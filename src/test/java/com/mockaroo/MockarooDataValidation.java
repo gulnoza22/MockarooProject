@@ -229,22 +229,15 @@ public class MockarooDataValidation {
 		// STEP 22
 		Collections.sort(cities);
 
-		int min = cities.get(0).length();
-		int max = cities.get(0).length();
-
-		String cityShort = "";
-		String cityLongest = "";
+		String cityShort = cities.get(0);
+		String cityLongest = cities.get(0);
 
 		for (String city : cities) {
-			if (city.length() > max) {
-				max = city.length();
+			if (city.length() > cityLongest.length())
 				cityLongest = city;
-			}
 
-			if (city.length() < min) {
-				min = city.length();
+			if (city.length() < cityShort.length())
 				cityShort = city;
-			}
 		}
 		
 		System.out.println("============================================");
